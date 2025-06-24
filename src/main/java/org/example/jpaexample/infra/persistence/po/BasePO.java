@@ -1,4 +1,4 @@
-package org.example.jpaexample.audit.persistence;
+package org.example.jpaexample.infra.persistence.po;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -13,6 +13,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,7 +21,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class AuditablePO {
+@Slf4j
+public class BasePO {
 
     protected String createdBy;
 
@@ -35,9 +37,27 @@ public class AuditablePO {
     @Temporal(TemporalType.TIMESTAMP)
     protected Date modifiedOn;
 
+    /**
+     * the following fields are used for soft delete <br>
+     * <code>
+     * org.example.jpaexample.infra.persistence.po.BasePO.deleted <br>
+     * org.example.jpaexample.infra.persistence.po.BasePO.deleteOn
+     * </code>
+     * <br>
+     * for delete: <br>
+     * call: <code>org.example.jpaexample.infra.persistence.po.BasePO#softDelete</code>
+     * <br>
+     * for query:<br>
+     * use <code>@Where(clause = "is_deleted = 0")</code> on the children class:
+     * for unique index:
+     * add these 2 fields at the last of the index, since one record can be soft deleted
+     */
+    private boolean deleted;
+
+    private long deleteOn;
+
     @PrePersist
     public void preCreate() {
-
         preCreateHook();
     }
 
@@ -66,6 +86,23 @@ public class AuditablePO {
     @PostRemove
     public void postRemove() {
         postRemoveHook();
+    }
+
+    protected void softDelete() {
+        preSoftDelete();
+        softDeleteInternal();
+        postSoftDelete();
+    }
+
+    private void softDeleteInternal() {
+        this.deleted = true;
+        this.deleteOn = System.currentTimeMillis();
+    }
+
+    protected void preSoftDelete() {
+    }
+
+    protected void postSoftDelete() {
     }
 
     /*

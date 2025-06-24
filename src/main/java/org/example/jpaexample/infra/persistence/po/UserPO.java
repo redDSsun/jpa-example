@@ -1,4 +1,4 @@
-package org.example.jpaexample.audit.persistence;
+package org.example.jpaexample.infra.persistence.po;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "user", schema = "demo")
-public class UserPO extends AuditablePO {
+public class UserPO extends BasePO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
