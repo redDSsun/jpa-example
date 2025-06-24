@@ -88,7 +88,7 @@ public class BasePO {
         postRemoveHook();
     }
 
-    protected void softDelete() {
+    public void softDelete() {
         preSoftDelete();
         softDeleteInternal();
         postSoftDelete();

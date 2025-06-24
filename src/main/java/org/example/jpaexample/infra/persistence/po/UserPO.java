@@ -7,11 +7,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "user", schema = "demo")
+@Slf4j
 public class UserPO extends BasePO {
 
     @Id
@@ -23,31 +25,31 @@ public class UserPO extends BasePO {
 
     @Override
     protected void preCreateHook() {
-        super.preCreateHook();
+        log.info("sub class preCreateHook");
     }
 
     @Override
     protected void preUpdateHook() {
-        super.preUpdateHook();
+        log.info("sub class preUpdateHook");
     }
 
     @Override
     protected void preRemoveHook() {
-        super.preRemoveHook();
+        log.info("sub class preRemoveHook");
     }
 
     @Override
     protected void postCreateHook() {
-        super.postCreateHook();
+        log.info("sub class postCreateHook");
     }
 
     @Override
     protected void postUpdateHook() {
-        super.postUpdateHook();
+        log.info("sub class postUpdateHook");
     }
 
     @Override
     protected void postRemoveHook() {
-        super.postRemoveHook();
+        log.info("sub class postRemoveHook");
     }
 }
